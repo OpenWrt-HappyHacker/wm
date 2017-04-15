@@ -16,6 +16,24 @@ show_ssid_list(){
     done
 }
 
+timeout () {
+    local timeout_secs=${1:-10}
+    shift
+
+    [ ! -z "${timeout_secs//[0-9]}" ] && { return 65; }
+    
+    # subshell
+    ( 
+        "$@" &
+        child=$!
+        #trap - '' SIGTERM #why would we need this?
+        (       
+                sleep $timeout_secs
+                kill $child 2> /dev/null # TODO returns 143 instead of "real" timeout's 124
+        ) &
+        wait $child
+    )
+}
 
 there_ssid(){
     local _ssid=$1
@@ -144,9 +162,8 @@ has_internet(){
     #fi
 
     # DNS checks
-    #TODO: External timeout control, nslookup minimal version not soporte set timeout
     #if [ $_errs_cnt = 0 ];then
-    #    nslookup $_tst_uri 8.8.8.8 >/dev/null 2>&1
+    #    timeout $ping_tmo_dfl nslookup $_tst_uri 8.8.8.8 >/dev/null 2>&1
     #    local _errs_cnt=$(expr $_errs_cnt + $?)  # _errs_cnt+= exit_code_dns_lookup, 0 ok 1 error
     #fi
 
