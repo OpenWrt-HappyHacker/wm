@@ -67,7 +67,6 @@ do_scan(){
     local _wst_tm=$wst_tm_dfl # Seconds between retries
     
     #TODO: Filter "Extended capabilities: SSID List" string.
-
     
     #echo ">>>> do_scan $_wm_dev $_wst_tm" >> /root/wm.log
     
@@ -252,7 +251,7 @@ do_conf(){
     # WORKAROUND: filter wireless templates use to avoid break wpa_supplican and wireless module
     for tpl in $(ls $tplcfg_pth | grep -vE "wireless");do
         #echo "cat "${tplcfg_pth}${tpl}" | uci import $tpl" 
-        #cat "${tplcfg_pth}${tpl}" | uci import $tpl >> /root/wm.log
+        cat "${tplcfg_pth}${tpl}" | uci import $tpl >> /root/wm.log
         uci commit $tpl
     done
 
