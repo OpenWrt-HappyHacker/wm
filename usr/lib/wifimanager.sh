@@ -251,7 +251,8 @@ do_conf(){
     # WORKAROUND: filter wireless templates use to avoid break wpa_supplican and wireless module
     for tpl in $(ls $tplcfg_pth | grep -vE "wireless");do
         #echo "cat "${tplcfg_pth}${tpl}" | uci import $tpl" 
-        cat "${tplcfg_pth}${tpl}" | uci import $tpl >> /root/wm.log
+        #cat "${tplcfg_pth}${tpl}" | uci import $tpl >> /root/wm.log
+        cat "${tplcfg_pth}${tpl}" | uci import $tpl
         uci commit $tpl
     done
 
